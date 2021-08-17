@@ -3,6 +3,7 @@ package com.example.infiniterainbow
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.infiniterainbow.adapter.ColorsListAdapter
@@ -22,6 +23,17 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
         setupOnScrollListener()
+        setupOnClickListeners()
+    }
+
+    private fun setupOnClickListeners() {
+        rvAdapter.onCardClicked = { card ->
+            val intColor = card.cardBackgroundColor.defaultColor
+            val hexColor = String.format("#%06X", 0xFFFFFF and intColor)
+            val rgbColor = getRgbFromHex(hexColor)
+
+            Toast.makeText(this, "${rgbColor}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setupOnScrollListener() {
@@ -57,5 +69,13 @@ class MainActivity : AppCompatActivity() {
             Random.nextInt(256),
             Random.nextInt(256)
         )
+    }
+
+    fun getRgbFromHex(hex: String): IntArray {
+        val initColor = Color.parseColor(hex)
+        val r = Color.red(initColor)
+        val g = Color.green(initColor)
+        val b = Color.blue(initColor)
+        return intArrayOf(r, g, b, )
     }
 }

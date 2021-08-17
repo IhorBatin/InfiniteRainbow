@@ -10,6 +10,8 @@ import com.example.infiniterainbow.adapter.ColorsListAdapter.ColorsListViewHolde
 
 class ColorsListAdapter(private var colorsList: MutableList<Int>) : RecyclerView.Adapter<ColorsListViewHolder>() {
 
+    var onCardClicked: ((CardView) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorsListViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(parent.context)
@@ -32,11 +34,14 @@ class ColorsListAdapter(private var colorsList: MutableList<Int>) : RecyclerView
         notifyItemInserted(lastItemPosition)
     }
 
-    class ColorsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ColorsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val colorCardView: CardView = itemView.findViewById(R.id.cvColorItem)
 
         init {
             // Define click listener for the ViewHolder's View.
+            colorCardView.setOnClickListener {
+                onCardClicked?.invoke(it as CardView)
+            }
         }
     }
 }
