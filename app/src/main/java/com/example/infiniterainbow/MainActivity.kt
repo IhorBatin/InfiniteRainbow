@@ -1,8 +1,10 @@
 package com.example.infiniterainbow
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,8 +13,9 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-    private val initListSize = 50
-    private val incrementalAddition = 25
+    private var colorInfoToast: Toast? = null
+    private val initListSize = 75
+    private val incrementalAddition = 50
     private lateinit var rvColorsList: RecyclerView
     private lateinit var rvAdapter: ColorsListAdapter
 
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         setupOnScrollListener()
         setupOnClickListeners()
+        showGreetingToast()
     }
 
     private fun setupOnClickListeners() {
@@ -31,8 +35,7 @@ class MainActivity : AppCompatActivity() {
             val intColor = card.cardBackgroundColor.defaultColor
             val hexColor = String.format("#%06X", 0xFFFFFF and intColor)
             val rgbColor = getRgbFromInt(intColor)
-
-            Toast.makeText(this, "RGB: $rgbColor  |  HEX: $hexColor", Toast.LENGTH_LONG).show()
+            updateToastMsg("RGB: $rgbColor  |  HEX: $hexColor")
         }
     }
 
@@ -77,5 +80,18 @@ class MainActivity : AppCompatActivity() {
                 "${Color.green(initColor)}," +
                 "${Color.blue(initColor)}" +
                 ")"
+    }
+
+    private fun showGreetingToast() {
+        val toast = Toast.makeText(this, getString(R.string.check_color_value_text), Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0)
+        toast.show()
+    }
+
+    @SuppressLint("ShowToast")
+    private fun updateToastMsg(msg: String) {
+        if (colorInfoToast != null) colorInfoToast?.cancel()
+        colorInfoToast = Toast.makeText(this, msg, Toast.LENGTH_LONG)
+        colorInfoToast?.show()
     }
 }
