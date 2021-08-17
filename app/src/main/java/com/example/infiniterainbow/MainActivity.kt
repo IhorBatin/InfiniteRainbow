@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
         rvAdapter.onCardClicked = { card ->
             val intColor = card.cardBackgroundColor.defaultColor
             val hexColor = String.format("#%06X", 0xFFFFFF and intColor)
-            val rgbColor = getRgbFromHex(hexColor)
+            val rgbColor = getRgbFromInt(intColor)
 
-            Toast.makeText(this, "${rgbColor}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "RGB: $rgbColor  |  HEX: $hexColor", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -71,11 +71,11 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    fun getRgbFromHex(hex: String): IntArray {
-        val initColor = Color.parseColor(hex)
-        val r = Color.red(initColor)
-        val g = Color.green(initColor)
-        val b = Color.blue(initColor)
-        return intArrayOf(r, g, b, )
+    private fun getRgbFromInt(initColor: Int): String {
+        return "(" +
+                "${Color.red(initColor)}," +
+                "${Color.green(initColor)}," +
+                "${Color.blue(initColor)}" +
+                ")"
     }
 }
