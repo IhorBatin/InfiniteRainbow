@@ -26,6 +26,11 @@ class ColorsListAdapter(private var colorsList: MutableList<Int>) : RecyclerView
 
     override fun getItemCount() = colorsList.size
 
+    fun addMoreItems(additionalList: MutableList<Int>) {
+        val lastItemPosition = colorsList.size
+        colorsList += additionalList
+        notifyItemInserted(lastItemPosition)
+    }
 
     class ColorsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val colorCardView: CardView = itemView.findViewById(R.id.cvColorItem)
