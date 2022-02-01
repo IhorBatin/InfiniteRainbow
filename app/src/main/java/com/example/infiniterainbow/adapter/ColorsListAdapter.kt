@@ -1,5 +1,5 @@
 package com.example.infiniterainbow.adapter
-
+/*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,4 +44,4 @@ class ColorsListAdapter(private var colorsList: MutableList<Int>) : RecyclerView
             }
         }
     }
-}
+}*/
