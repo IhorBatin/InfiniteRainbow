@@ -10,9 +10,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+
 @Composable
 fun ColorCard(
-    color: Int,
+    color: Int = 55,
     onClick: (Int) -> Unit,
 ) {
     TextButton( // TODO: Temporarily moved whole card onto button,
@@ -25,10 +26,8 @@ fun ColorCard(
                 .fillMaxWidth()
                 .height(70.dp),
             shape = RoundedCornerShape(16),
-            //elevation = 8.dp,
             backgroundColor = Color(color)
         ) {
         }
     }
-
 }
