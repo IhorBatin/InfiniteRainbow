@@ -12,13 +12,20 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.infiniterainbow.components.ColorCard
+import com.example.infiniterainbow.ext.isScrolledToTheEnd
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -31,22 +38,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        updateToastMsg(getString(R.string.check_color_value_text))
 
         setContent {
-            Column {
+            val listState = rememberLazyListState()
+            val colorsList = remember { mutableStateListOf<Int>()}
+            colorsList.addAll(generateListOfColors(initListSize).toList())
 
+            if (listState.isScrolledToTheEnd())
+                colorsList.addAll(generateListOfColors(incrementalAddition))
+
+            LazyColumn(state = listState) {
+               items(colorsList) {  colorInt ->
+                   ColorCard(colorInt) { onCardClicked(it) }
+               }
             }
         }
     }
 
-
-    private fun setupOnClickListeners() {
- /*       rvAdapter.onCardClicked = { card ->
-            val intColor = card.cardBackgroundColor.defaultColor
-            val hexColor = String.format("#%06X", 0xFFFFFF and intColor)
-            val rgbColor = getRgbFromInt(intColor)
-            updateToastMsg("RGB: $rgbColor  |  HEX: $hexColor")
-        }*/
+    private fun onCardClicked(intColor: Int) {
+        val hexColor = String.format("#%06X", 0xFFFFFF and intColor)
+        val rgbColor = getRgbFromInt(intColor)
+        updateToastMsg("RGB: $rgbColor  |  HEX: $hexColor")
     }
 
     /*private fun setupOnScrollListener() {
