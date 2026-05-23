@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(isAtEnd.value) {
                 if (isAtEnd.value) {
-                    colorsList.addAll(generateListOfColors(incrementalAddition))
+                    colorsList.addAll(generateListOfColors(incrementalAddition, colorsList))
                 }
             }
 
@@ -81,12 +81,18 @@ class MainActivity : ComponentActivity() {
         updateToastMsg(getString(R.string.copied))
     }
 
-    private fun generateListOfColors(numOfColors: Int): MutableList<Int> {
-        val colorsList: MutableList<Int> = mutableListOf()
-        (0..numOfColors).forEach { _ ->
-            colorsList.add(getRandomColor())
+    private fun generateListOfColors(
+        numOfColors: Int,
+        existingColors: Collection<Int> = emptyList()
+    ): List<Int> {
+        val newColors = mutableSetOf<Int>()
+        while (newColors.size < numOfColors) {
+            val color = getRandomColor()
+            if (color !in existingColors && color !in newColors) {
+                newColors.add(color)
+            }
         }
-        return colorsList
+        return newColors.toList()
     }
 
     private fun getRandomColor(): Int {

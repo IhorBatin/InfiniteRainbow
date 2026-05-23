@@ -38,7 +38,7 @@ fun ColorCard(
             .height(70.dp)
             .clickable { onCardClick(color) },
         shape = RoundedCornerShape(16),
-        elevation = 4.dp
+        elevation = 4.dp,
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
