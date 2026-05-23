@@ -1,5 +1,7 @@
 package com.example.infiniterainbow
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
@@ -12,7 +14,10 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import com.example.infiniterainbow.components.ColorCard
 import kotlin.random.Random
 
@@ -54,21 +59,33 @@ class MainActivity : ComponentActivity() {
                 contentPadding = WindowInsets.systemBars.asPaddingValues()
             ) {
                 items(colorsList) { colorInt ->
-                    ColorCard(colorInt) { onCardClicked(it) }
+                    ColorCard(
+                        color = colorInt,
+                        onCardClick = { onCardClicked(it) },
+                        onCopyClick = { onCopyClicked(it) }
+                    )
                 }
             }
         }
     }
 
     private fun onCardClicked(intColor: Int) {
-        val hexColor = String.format("#%06X", 0xFFFFFF and intColor)
-        val rgbColor = getRgbFromInt(intColor)
-        updateToastMsg("RGB: $rgbColor  |  HEX: $hexColor")
+        updateToastMsg(formatColorName(intColor))
+    }
+
+    private fun onCopyClicked(intColor: Int) {
+        val hexColor = formatColorName(intColor)
+        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(getString(R.string.color), hexColor)
+        clipboard.setPrimaryClip(clip)
+        updateToastMsg(getString(R.string.copied))
     }
 
     private fun generateListOfColors(numOfColors: Int): MutableList<Int> {
         val colorsList: MutableList<Int> = mutableListOf()
-        for (i in 0..numOfColors) colorsList.add(getRandomColor())
+        (0..numOfColors).forEach { _ ->
+            colorsList.add(getRandomColor())
+        }
         return colorsList
     }
 
@@ -93,5 +110,11 @@ class MainActivity : ComponentActivity() {
         if (colorInfoToast != null) colorInfoToast?.cancel()
         colorInfoToast = Toast.makeText(this, msg, Toast.LENGTH_LONG)
         colorInfoToast?.show()
+    }
+
+    private fun formatColorName(colorInt: Int): String {
+        val hexColor = String.format("#%06X", 0xFFFFFF and colorInt)
+        val rgbColor = getRgbFromInt(colorInt)
+        return getString(R.string.full_color_name, rgbColor, hexColor)
     }
 }
