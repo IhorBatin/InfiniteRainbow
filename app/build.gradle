@@ -1,15 +1,16 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
-    compileSdk 31
+    namespace 'com.example.infiniterainbow'
+    compileSdk 37
 
     defaultConfig {
         applicationId "com.example.infiniterainbow"
         minSdk 24
-        targetSdk 31
+        targetSdk 37
         versionCode 1
         versionName "1.0"
 
@@ -26,41 +27,38 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
     buildFeatures {
         compose true
-    }
-    composeOptions {
-        kotlinCompilerVersion "1.5.20"
     }
 }
 
 dependencies {
-    def compose_version = "1.0.5"
+    def composeBom = platform('androidx.compose:compose-bom:2026.05.01')
+    implementation composeBom
+    androidTestImplementation composeBom
+
     // Compose UI
-    implementation("androidx.compose.ui:ui:$compose_version")
+    implementation 'androidx.compose.ui:ui'
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:$compose_version")
+    implementation 'androidx.compose.ui:ui-tooling'
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation("androidx.compose.foundation:foundation:$compose_version")
+    implementation 'androidx.compose.foundation:foundation'
     // Material Design
-    implementation("androidx.compose.material:material:$compose_version")
+    implementation 'androidx.compose.material:material'
     // Material design icons
-    implementation("androidx.compose.material:material-icons-core:$compose_version")
-    implementation("androidx.compose.material:material-icons-extended:$compose_version")
+    implementation 'androidx.compose.material:material-icons-core'
+    implementation 'androidx.compose.material:material-icons-extended'
     // Integration with observables
-    implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
-    implementation("androidx.compose.runtime:runtime-rxjava2:$compose_version")
+    implementation 'androidx.compose.runtime:runtime-livedata'
+    implementation 'androidx.compose.runtime:runtime-rxjava2'
 
-    implementation ("androidx.activity:activity-compose:1.4.0")
+    implementation 'androidx.activity:activity-compose:1.13.0'
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'androidx.core:core-ktx:1.18.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.14.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 }
