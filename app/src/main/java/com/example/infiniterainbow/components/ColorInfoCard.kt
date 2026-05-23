@@ -1,33 +1,69 @@
 package com.example.infiniterainbow.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.TextButton
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
+import com.example.infiniterainbow.R
 
 @Composable
 fun ColorCard(
-    color: Int = 55,
-    onClick: (Int) -> Unit,
+    color: Int = -15681628,
+    onCardClick: (Int) -> Unit,
+    onCopyClick: (Int) -> Unit,
 ) {
-    TextButton( // TODO: Temporarily moved whole card onto button,
-        // When issue with card clicks is resolved move back to using just card
-        onClick = { onClick(color) },
-        modifier = Modifier.wrapContentSize()
+    val composeColor = Color(color)
+    val contentColor = if (composeColor.luminance() > 0.5f) Color.Black else Color.White
+
+    Card(
+        backgroundColor = composeColor,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .height(70.dp)
+            .clickable { onCardClick(color) },
+        shape = RoundedCornerShape(16),
+        elevation = 4.dp
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp),
-            shape = RoundedCornerShape(16),
-            backgroundColor = Color(color)
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.CenterEnd
         ) {
+            IconButton(
+                onClick = { onCopyClick(color) },
+                modifier = Modifier.padding(end = 8.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_copy),
+                    contentDescription = "Copy color value",
+                    tint = contentColor
+                )
+            }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ColorCardPreview() {
+    Column {
+        ColorCard(color = -15681628, onCardClick = {}, onCopyClick = {})
+        ColorCard(color = -65536, onCardClick = {}, onCopyClick = {})
+        ColorCard(color = -16711936, onCardClick = {}, onCopyClick = {})
     }
 }

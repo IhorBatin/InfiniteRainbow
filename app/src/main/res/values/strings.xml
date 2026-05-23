@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Infinite Rainbow</string>
-    <string name="check_color_value_text">Tap on any color to check its RGB or Hexadecimal value</string>
+    <string name="check_color_value_text">Tap on any color to see its value</string>
+    <string name="copied">Copied</string>
+    <string name="color">Color</string>
+    <string name="full_color_name">RGB: %1$s  |  HEX: %2$s</string>
 </resources>
