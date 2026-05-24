@@ -24,7 +24,7 @@ import com.example.infiniterainbow.R
 @Composable
 fun ColorCard(
     modifier: Modifier = Modifier,
-    color: Int = -15681628,
+    color: Int,
     onCardClick: ((Int) -> Unit)? = null,
     onCopyClick: (Int) -> Unit,
 ) {
@@ -60,9 +60,13 @@ fun ColorCard(
 @Preview(showBackground = true)
 @Composable
 fun ColorCardPreview() {
-    Column {
-        ColorCard(color = -15681628, onCardClick = {}, onCopyClick = {})
-        ColorCard(color = -65536, onCardClick = {}, onCopyClick = {})
-        ColorCard(color = -16711936, onCardClick = {}, onCopyClick = {})
-    }
+    ColorCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .height(70.dp),
+        color = -15681628,
+        onCardClick = {},
+        onCopyClick = {}
+    )
 }

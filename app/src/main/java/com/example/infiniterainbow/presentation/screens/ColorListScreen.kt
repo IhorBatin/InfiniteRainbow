@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.infiniterainbow.presentation.components.ColorCard
 import com.example.infiniterainbow.util.generateListOfColors
@@ -66,4 +67,10 @@ fun ColorListScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun ColorListScreenPreview() {
+    ColorListScreen({}, {})
 }

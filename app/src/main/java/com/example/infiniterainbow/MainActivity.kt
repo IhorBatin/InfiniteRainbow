@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
                     val colorInt = backStackEntry.arguments?.getInt("colorInt") ?: 0
                     PaletteScreen(
                         colorInt = colorInt,
+                        colorName = formatColorName(colorInt),
                         onCopyClick = { copyToClipboard(it) }
                     )
                 }

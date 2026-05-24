@@ -36,7 +36,11 @@ fun getSimilarColors(colorInt: Int): List<Int> {
         // More saturated
         Color.HSVToColor(floatArrayOf(hsv[0], (hsv[1] * 1.4f).coerceIn(0f, 1f), hsv[2])),
         // Less saturated
-        Color.HSVToColor(floatArrayOf(hsv[0], (hsv[1] * 0.6f).coerceIn(0f, 1f), hsv[2]))
+        Color.HSVToColor(floatArrayOf(hsv[0], (hsv[1] * 0.6f).coerceIn(0f, 1f), hsv[2])),
+        // Pure Tint (Highlight)
+        Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], 0.95f)),
+        // Pure Shade (Shadow)
+        Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], 0.30f))
     )
 }
 
