@@ -45,7 +45,10 @@ class MainActivity : ComponentActivity() {
                     PaletteScreen(
                         colorInt = colorInt,
                         colorName = formatColorName(colorInt),
-                        onCopyClick = { copyToClipboard(it) }
+                        onCopyClick = { copyToClipboard(it) },
+                        onCardClick = { tappedColorFromPalette ->
+                            navController.navigate("palette/$tappedColorFromPalette")
+                        }
                     )
                 }
             }

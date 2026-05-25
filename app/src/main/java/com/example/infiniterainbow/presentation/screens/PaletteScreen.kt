@@ -30,8 +30,9 @@ import com.example.infiniterainbow.util.getSimilarColors
 @Composable
 fun PaletteScreen(
     colorInt: Int,
+    colorName: String = stringResource(id = R.string.color),
     onCopyClick: (Int) -> Unit,
-    colorName: String = stringResource(id = R.string.color)
+    onCardClick: (Int) -> Unit,
 ) {
     val similarColors = remember(colorInt) { getSimilarColors(colorInt) }
     val analogousColors = remember(colorInt) { getAnalogousColors(colorInt) }
@@ -80,7 +81,8 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick
+                    onCopyClick = onCopyClick,
+                    onCardClick = onCardClick
                 )
                 ColorCard(
                     color = similarColors[1],
@@ -88,7 +90,8 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick
+                    onCopyClick = onCopyClick,
+                    onCardClick = onCardClick
                 )
             }
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -98,7 +101,8 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick
+                    onCopyClick = onCopyClick,
+                    onCardClick = onCardClick
                 )
                 ColorCard(
                     color = similarColors[3],
@@ -106,7 +110,8 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick
+                    onCopyClick = onCopyClick,
+                    onCardClick = onCardClick
                 )
             }
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -116,7 +121,8 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick
+                    onCopyClick = onCopyClick,
+                    onCardClick = onCardClick
                 )
                 ColorCard(
                     color = similarColors[5],
@@ -124,7 +130,8 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick
+                    onCopyClick = onCopyClick,
+                    onCardClick = onCardClick
                 )
             }
         }
@@ -146,7 +153,8 @@ fun PaletteScreen(
                     .weight(1f)
                     .height(100.dp)
                     .padding(8.dp),
-                onCopyClick = onCopyClick
+                onCopyClick = onCopyClick,
+                onCardClick = onCardClick
             )
             ColorCard(
                 color = analogousColors[1],
@@ -154,7 +162,8 @@ fun PaletteScreen(
                     .weight(1f)
                     .height(100.dp)
                     .padding(8.dp),
-                onCopyClick = onCopyClick
+                onCopyClick = onCopyClick,
+                onCardClick = onCardClick
             )
         }
 
@@ -172,7 +181,8 @@ fun PaletteScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp),
-            onCopyClick = onCopyClick
+            onCopyClick = onCopyClick,
+            onCardClick = onCardClick
         )
     }
 }
@@ -180,5 +190,5 @@ fun PaletteScreen(
 @Preview(showBackground = true)
 @Composable
 fun PaletteScreenPreview() {
-    PaletteScreen(colorInt = -15681628, onCopyClick = {},)
+    PaletteScreen(colorInt = -15681628, "Test color", onCopyClick = {}, onCardClick = {})
 }
