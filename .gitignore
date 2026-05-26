@@ -1,15 +1,49 @@
+# Gradle files
+.gradle/
+build/
+
+# Kotlin
+/build/
 *.iml
-.gradle
+*.ipr
+*.iws
+.idea/
+out/
+
+# Android Studio
 /local.properties
-/.idea/caches
-/.idea/libraries
+/.idea/caches/
+/.idea/libraries/
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+/.idea/runConfigurations.xml
+/.idea/modules/
+/.idea/vcs.xml
+/.idea/codeStyles/
+/.idea/dictionaries/
+/.idea/inspectionProfiles/
+
+# Built variants
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# OS generated files
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+
+# Android-specific
+/captures/
+.externalNativeBuild/
+.cxx/
