@@ -77,7 +77,6 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick,
                     onCardClick = onCardClick
                 )
                 ColorCard(
@@ -86,7 +85,6 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick,
                     onCardClick = onCardClick
                 )
             }
@@ -97,7 +95,6 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick,
                     onCardClick = onCardClick
                 )
                 ColorCard(
@@ -106,7 +103,6 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick,
                     onCardClick = onCardClick
                 )
             }
@@ -117,7 +113,6 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick,
                     onCardClick = onCardClick
                 )
                 ColorCard(
@@ -126,7 +121,6 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCopyClick = onCopyClick,
                     onCardClick = onCardClick
                 )
             }
@@ -149,7 +143,6 @@ fun PaletteScreen(
                     .weight(1f)
                     .height(100.dp)
                     .padding(8.dp),
-                onCopyClick = onCopyClick,
                 onCardClick = onCardClick
             )
             ColorCard(
@@ -158,7 +151,6 @@ fun PaletteScreen(
                     .weight(1f)
                     .height(100.dp)
                     .padding(8.dp),
-                onCopyClick = onCopyClick,
                 onCardClick = onCardClick
             )
         }
@@ -177,7 +169,6 @@ fun PaletteScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp),
-            onCopyClick = onCopyClick,
             onCardClick = onCardClick
         )
     }

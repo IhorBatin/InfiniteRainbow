@@ -2,7 +2,6 @@ package com.example.infiniterainbow.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,7 +25,7 @@ fun ColorCard(
     modifier: Modifier = Modifier,
     color: Int,
     onCardClick: ((Int) -> Unit)? = null,
-    onCopyClick: (Int) -> Unit,
+    onCopyClick: ((Int) -> Unit)? = null
 ) {
     val composeColor = Color(color)
     val contentColor = if (composeColor.luminance() > 0.5f) Color.Black else Color.White
@@ -43,15 +42,17 @@ fun ColorCard(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopEnd
         ) {
-            IconButton(
-                onClick = { onCopyClick(color) },
-                modifier = Modifier.padding(4.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_copy),
-                    contentDescription = "Copy color value",
-                    tint = contentColor
-                )
+            if (onCopyClick != null) {
+                IconButton(
+                    onClick = { onCopyClick(color) },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_copy),
+                        contentDescription = "Copy color value",
+                        tint = contentColor
+                    )
+                }
             }
         }
     }
@@ -66,7 +67,6 @@ fun ColorCardPreview() {
             .padding(8.dp)
             .height(70.dp),
         color = -15681628,
-        onCardClick = {},
-        onCopyClick = {}
+        onCardClick = {}
     )
 }

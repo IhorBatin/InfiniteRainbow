@@ -87,9 +87,6 @@ fun InfiniteRainbowApp() {
                     viewModel = rainbowViewModel,
                     onCardClick = { colorInt ->
                         navController.navigate("palette/$colorInt")
-                    },
-                    onCopyClick = { colorInt ->
-                        copyToClipboard(context, colorInt)
                     }
                 )
             }
