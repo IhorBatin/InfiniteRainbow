@@ -7,4 +7,5 @@
     <string name="similar_colors">Similar colors</string>
     <string name="analogous_colors">Analogous Colors</string>
     <string name="complimentary">Complimentary</string>
+    <string name="no_favorites_yet">No Favorites Yet</string>
 </resources>

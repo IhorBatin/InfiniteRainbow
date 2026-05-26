@@ -2,41 +2,37 @@ package com.example.infiniterainbow.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.infiniterainbow.R
 import com.example.infiniterainbow.presentation.components.ColorCard
-import com.example.infiniterainbow.util.getAnalogousColors
-import com.example.infiniterainbow.util.getComplementaryColor
-import com.example.infiniterainbow.util.getSimilarColors
+import com.example.infiniterainbow.presentation.viewmodel.RainbowViewModel
 
 @Composable
 fun PaletteScreen(
     colorInt: Int,
+    viewModel: RainbowViewModel = viewModel(),
     colorName: String = stringResource(id = R.string.color),
     onCopyClick: (Int) -> Unit,
     onCardClick: (Int) -> Unit,
 ) {
-    val similarColors = remember(colorInt) { getSimilarColors(colorInt) }
-    val analogousColors = remember(colorInt) { getAnalogousColors(colorInt) }
-    val complementaryColor = remember(colorInt) { getComplementaryColor(colorInt) }
+    LaunchedEffect(colorInt) {
+        viewModel.initPalette(colorInt)
+    }
+
+    val palette = viewModel.palette ?: return
 
     val isDark = isSystemInDarkTheme()
     val backgroundColor = if (isDark) Color.Black else Color.White
@@ -58,7 +54,7 @@ fun PaletteScreen(
         )
         Spacer(modifier = Modifier.height(8.dp))
         ColorCard(
-            color = colorInt,
+            color = palette.original,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
@@ -76,7 +72,7 @@ fun PaletteScreen(
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 ColorCard(
-                    color = similarColors[0],
+                    color = palette.similar[0],
                     modifier = Modifier
                         .weight(1f)
                         .height(100.dp)
@@ -85,27 +81,7 @@ fun PaletteScreen(
                     onCardClick = onCardClick
                 )
                 ColorCard(
-                    color = similarColors[1],
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(100.dp)
-                        .padding(8.dp),
-                    onCopyClick = onCopyClick,
-                    onCardClick = onCardClick
-                )
-            }
-            Row(modifier = Modifier.fillMaxWidth()) {
-                ColorCard(
-                    color = similarColors[2],
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(100.dp)
-                        .padding(8.dp),
-                    onCopyClick = onCopyClick,
-                    onCardClick = onCardClick
-                )
-                ColorCard(
-                    color = similarColors[3],
+                    color = palette.similar[1],
                     modifier = Modifier
                         .weight(1f)
                         .height(100.dp)
@@ -116,7 +92,7 @@ fun PaletteScreen(
             }
             Row(modifier = Modifier.fillMaxWidth()) {
                 ColorCard(
-                    color = similarColors[4],
+                    color = palette.similar[2],
                     modifier = Modifier
                         .weight(1f)
                         .height(100.dp)
@@ -125,7 +101,27 @@ fun PaletteScreen(
                     onCardClick = onCardClick
                 )
                 ColorCard(
-                    color = similarColors[5],
+                    color = palette.similar[3],
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(100.dp)
+                        .padding(8.dp),
+                    onCopyClick = onCopyClick,
+                    onCardClick = onCardClick
+                )
+            }
+            Row(modifier = Modifier.fillMaxWidth()) {
+                ColorCard(
+                    color = palette.similar[4],
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(100.dp)
+                        .padding(8.dp),
+                    onCopyClick = onCopyClick,
+                    onCardClick = onCardClick
+                )
+                ColorCard(
+                    color = palette.similar[5],
                     modifier = Modifier
                         .weight(1f)
                         .height(100.dp)
@@ -148,7 +144,7 @@ fun PaletteScreen(
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
             ColorCard(
-                color = analogousColors[0],
+                color = palette.analogous[0],
                 modifier = Modifier
                     .weight(1f)
                     .height(100.dp)
@@ -157,7 +153,7 @@ fun PaletteScreen(
                 onCardClick = onCardClick
             )
             ColorCard(
-                color = analogousColors[1],
+                color = palette.analogous[1],
                 modifier = Modifier
                     .weight(1f)
                     .height(100.dp)
@@ -177,7 +173,7 @@ fun PaletteScreen(
         )
         Spacer(modifier = Modifier.height(8.dp))
         ColorCard(
-            color = complementaryColor,
+            color = palette.complementary,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp),
@@ -190,5 +186,5 @@ fun PaletteScreen(
 @Preview(showBackground = true)
 @Composable
 fun PaletteScreenPreview() {
-    PaletteScreen(colorInt = -15681628, "Test color", onCopyClick = {}, onCardClick = {})
+    PaletteScreen(colorInt = -15681628, colorName = "Sample color", onCopyClick = {}, onCardClick = {})
 }

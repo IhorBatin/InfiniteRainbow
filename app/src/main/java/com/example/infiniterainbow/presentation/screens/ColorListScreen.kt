@@ -9,29 +9,23 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.infiniterainbow.presentation.components.ColorCard
-import com.example.infiniterainbow.util.generateListOfColors
-
-private const val initListSize = 75
-private const val incrementalAddition = 50
+import com.example.infiniterainbow.presentation.viewmodel.RainbowViewModel
 
 @Composable
 fun ColorListScreen(
+    viewModel: RainbowViewModel = viewModel(),
     onCardClick: (Int) -> Unit,
     onCopyClick: (Int) -> Unit
 ) {
     val listState = rememberLazyListState()
-    val colorsList = remember {
-        mutableStateListOf<Int>().apply {
-            addAll(generateListOfColors(initListSize))
-        }
-    }
+    val colorsList = viewModel.colorsList
 
     val isAtEnd = remember {
         derivedStateOf {
@@ -42,7 +36,7 @@ fun ColorListScreen(
 
     LaunchedEffect(isAtEnd.value) {
         if (isAtEnd.value) {
-            colorsList.addAll(generateListOfColors(incrementalAddition, colorsList))
+            viewModel.loadMoreColors()
         }
     }
 
@@ -72,5 +66,5 @@ fun ColorListScreen(
 @Preview
 @Composable
 fun ColorListScreenPreview() {
-    ColorListScreen({}, {})
+    ColorListScreen(onCardClick = {}, onCopyClick = {})
 }
