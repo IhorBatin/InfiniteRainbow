@@ -8,4 +8,8 @@
     <string name="analogous_colors">Analogous Colors</string>
     <string name="complimentary">Complimentary</string>
     <string name="no_favorites_yet">No Favorites Yet</string>
+    <string name="clear_favorites">Clear All Favorites</string>
+    <string name="clear_favorites_confirmation">Are you sure you want to remove all saved colors?</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
 </resources>

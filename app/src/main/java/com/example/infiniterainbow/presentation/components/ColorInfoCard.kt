@@ -63,16 +63,3 @@ fun ColorCard(
     }
 }
 
-/*
-@Preview(showBackground = true)
-@Composable
-fun ColorCardPreview() {
-    ColorCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .height(70.dp),
-        color = -15681628,
-        onCardClick = {}
-    )
-}*/

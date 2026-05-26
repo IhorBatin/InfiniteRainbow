@@ -223,8 +223,3 @@ fun PaletteScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PaletteScreenPreview() {
-    // Note: RainbowViewModel cannot be easily mocked for preview without additional setup
-}

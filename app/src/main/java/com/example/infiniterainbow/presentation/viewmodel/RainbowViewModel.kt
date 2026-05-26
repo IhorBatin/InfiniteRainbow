@@ -14,7 +14,8 @@ class RainbowViewModel(
     private val generateColorsUseCase: GenerateColorsUseCase,
     private val getColorPaletteUseCase: GetColorPaletteUseCase,
     private val getFavoriteColorsUseCase: GetFavoriteColorsUseCase,
-    private val toggleFavoriteColorUseCase: ToggleFavoriteColorUseCase
+    private val toggleFavoriteColorUseCase: ToggleFavoriteColorUseCase,
+    private val clearAllFavoritesUseCase: ClearAllFavoritesUseCase
 ) : ViewModel() {
 
     // Color List State
@@ -58,12 +59,19 @@ class RainbowViewModel(
         }
     }
 
+    fun clearFavorites() {
+        viewModelScope.launch {
+            clearAllFavoritesUseCase.execute()
+        }
+    }
+
     companion object {
         fun provideFactory(
             generateColorsUseCase: GenerateColorsUseCase,
             getColorPaletteUseCase: GetColorPaletteUseCase,
             getFavoriteColorsUseCase: GetFavoriteColorsUseCase,
-            toggleFavoriteColorUseCase: ToggleFavoriteColorUseCase
+            toggleFavoriteColorUseCase: ToggleFavoriteColorUseCase,
+            clearAllFavoritesUseCase: ClearAllFavoritesUseCase
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -71,7 +79,8 @@ class RainbowViewModel(
                     generateColorsUseCase,
                     getColorPaletteUseCase,
                     getFavoriteColorsUseCase,
-                    toggleFavoriteColorUseCase
+                    toggleFavoriteColorUseCase,
+                    clearAllFavoritesUseCase
                 ) as T
             }
         }

@@ -29,4 +29,10 @@ class FavoritesDataSource(private val dataStore: DataStore<Preferences>) {
             preferences[favoritesKey] = currentFavorites
         }
     }
+
+    suspend fun clearAllFavorites() {
+        dataStore.edit { preferences ->
+            preferences.remove(favoritesKey)
+        }
+    }
 }

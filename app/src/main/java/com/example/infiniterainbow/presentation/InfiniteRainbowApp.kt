@@ -24,6 +24,7 @@ import com.example.infiniterainbow.R
 import com.example.infiniterainbow.data.local.FavoritesDataSource
 import com.example.infiniterainbow.data.local.dataStore
 import com.example.infiniterainbow.data.repository.ColorRepositoryImpl
+import com.example.infiniterainbow.domain.usecase.ClearAllFavoritesUseCase
 import com.example.infiniterainbow.domain.usecase.GenerateColorsUseCase
 import com.example.infiniterainbow.domain.usecase.GetColorPaletteUseCase
 import com.example.infiniterainbow.domain.usecase.GetFavoriteColorsUseCase
@@ -54,7 +55,8 @@ fun InfiniteRainbowApp() {
                 generateColorsUseCase = GenerateColorsUseCase(),
                 getColorPaletteUseCase = GetColorPaletteUseCase(),
                 getFavoriteColorsUseCase = GetFavoriteColorsUseCase(repository),
-                toggleFavoriteColorUseCase = ToggleFavoriteColorUseCase(repository)
+                toggleFavoriteColorUseCase = ToggleFavoriteColorUseCase(repository),
+                clearAllFavoritesUseCase = ClearAllFavoritesUseCase(repository)
             )
         }
     )
@@ -112,9 +114,6 @@ fun InfiniteRainbowApp() {
                     viewModel = rainbowViewModel,
                     onCardClick = { colorInt ->
                         navController.navigate("palette/$colorInt")
-                    },
-                    onCopyIconClick = { colorInt ->
-                        copyToClipboard(context, colorInt)
                     }
                 )
             }

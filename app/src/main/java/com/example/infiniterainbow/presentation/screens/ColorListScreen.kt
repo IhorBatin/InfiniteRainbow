@@ -55,7 +55,7 @@ fun ColorListScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
-                    .height(70.dp),
+                    .height(80.dp),
                 onCardClick = onCardClick,
                 showFavoriteIcon = true,
                 viewModel = viewModel
@@ -64,10 +64,3 @@ fun ColorListScreen(
     }
 }
 
-/*
-@Preview
-@Composable
-fun ColorListScreenPreview() {
-    ColorListScreen(onCardClick = {}, on)
-}
-*/
