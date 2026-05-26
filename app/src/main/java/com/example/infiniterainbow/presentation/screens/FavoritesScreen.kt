@@ -3,8 +3,9 @@ package com.example.infiniterainbow.presentation.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -48,7 +49,8 @@ fun FavoritesScreen(
                 )
             }
         } else {
-            LazyColumn(
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = WindowInsets.systemBars.asPaddingValues()
             ) {
@@ -58,8 +60,9 @@ fun FavoritesScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-                            .height(70.dp),
-                        onCardClick = onCardClick
+                            .aspectRatio(1f),
+                        onCardClick = onCardClick,
+                        viewModel = viewModel
                     )
                 }
             }

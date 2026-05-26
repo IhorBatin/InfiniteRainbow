@@ -101,6 +101,9 @@ fun InfiniteRainbowApp() {
                     viewModel = rainbowViewModel,
                     onCardClick = { colorInt ->
                         navController.navigate("palette/$colorInt")
+                    },
+                    onFavoriteClick = { colorInt ->
+                        rainbowViewModel.toggleFavorite(colorInt)
                     }
                 )
             }

@@ -21,7 +21,8 @@ import com.example.infiniterainbow.presentation.viewmodel.RainbowViewModel
 @Composable
 fun ColorListScreen(
     viewModel: RainbowViewModel = viewModel(),
-    onCardClick: (Int) -> Unit
+    onCardClick: (Int) -> Unit,
+    onFavoriteClick: (Int) -> Unit
 ) {
     val listState = rememberLazyListState()
     val colorsList = viewModel.colorsList
@@ -55,14 +56,18 @@ fun ColorListScreen(
                     .fillMaxWidth()
                     .padding(8.dp)
                     .height(70.dp),
-                onCardClick = onCardClick
+                onCardClick = onCardClick,
+                showFavoriteIcon = true,
+                viewModel = viewModel
             )
         }
     }
 }
 
+/*
 @Preview
 @Composable
 fun ColorListScreenPreview() {
-    ColorListScreen(onCardClick = {})
+    ColorListScreen(onCardClick = {}, on)
 }
+*/

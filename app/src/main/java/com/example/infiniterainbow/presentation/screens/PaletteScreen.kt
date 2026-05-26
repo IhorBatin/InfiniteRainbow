@@ -46,26 +46,39 @@ fun PaletteScreen(
             .fillMaxSize()
             .background(backgroundColor)
     ) {
+        // Action buttons row
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 50.dp)
         ) {
-            // Add to favorites action icon
-            IconButton(
-                onClick = { viewModel.toggleFavorite(colorInt) },
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(top = 8.dp, end = 16.dp)
+            Row(
+                modifier = Modifier.align(Alignment.End)
             ) {
-                Icon(
-                    painter = painterResource(
-                        id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_empty
-                    ),
-                    contentDescription = "Toggle favorite",
-                    tint = textColor
-                )
+                IconButton(
+                    onClick = { onCopyClick(colorInt) },
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_copy),
+                        contentDescription = "Copy color value",
+                        tint = textColor
+                    )
+                }
+                IconButton(
+                    onClick = { viewModel.toggleFavorite(colorInt) },
+                    modifier = Modifier
+                        .padding(top = 8.dp, end = 16.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_empty
+                        ),
+                        contentDescription = "Toggle favorite",
+                        tint = textColor
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(18.dp))
 
@@ -82,7 +95,7 @@ fun PaletteScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),
-                onCopyClick = onCopyClick
+                viewModel = viewModel
             )
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -101,7 +114,8 @@ fun PaletteScreen(
                             .weight(1f)
                             .height(100.dp)
                             .padding(8.dp),
-                        onCardClick = onCardClick
+                        onCardClick = onCardClick,
+                        viewModel = viewModel
                     )
                     ColorCard(
                         color = palette.similar[1],
@@ -109,7 +123,8 @@ fun PaletteScreen(
                             .weight(1f)
                             .height(100.dp)
                             .padding(8.dp),
-                        onCardClick = onCardClick
+                        onCardClick = onCardClick,
+                        viewModel = viewModel
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -119,7 +134,8 @@ fun PaletteScreen(
                             .weight(1f)
                             .height(100.dp)
                             .padding(8.dp),
-                        onCardClick = onCardClick
+                        onCardClick = onCardClick,
+                        viewModel = viewModel
                     )
                     ColorCard(
                         color = palette.similar[3],
@@ -127,7 +143,8 @@ fun PaletteScreen(
                             .weight(1f)
                             .height(100.dp)
                             .padding(8.dp),
-                        onCardClick = onCardClick
+                        onCardClick = onCardClick,
+                        viewModel = viewModel
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -137,7 +154,8 @@ fun PaletteScreen(
                             .weight(1f)
                             .height(100.dp)
                             .padding(8.dp),
-                        onCardClick = onCardClick
+                        onCardClick = onCardClick,
+                        viewModel = viewModel
                     )
                     ColorCard(
                         color = palette.similar[5],
@@ -145,7 +163,8 @@ fun PaletteScreen(
                             .weight(1f)
                             .height(100.dp)
                             .padding(8.dp),
-                        onCardClick = onCardClick
+                        onCardClick = onCardClick,
+                        viewModel = viewModel
                     )
                 }
             }
@@ -167,7 +186,8 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCardClick = onCardClick
+                    onCardClick = onCardClick,
+                    viewModel = viewModel
                 )
                 ColorCard(
                     color = palette.analogous[1],
@@ -175,7 +195,8 @@ fun PaletteScreen(
                         .weight(1f)
                         .height(100.dp)
                         .padding(8.dp),
-                    onCardClick = onCardClick
+                    onCardClick = onCardClick,
+                    viewModel = viewModel
                 )
             }
 
@@ -192,8 +213,9 @@ fun PaletteScreen(
                 color = palette.complementary,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp),
-                onCardClick = onCardClick
+                    .height(120.dp),
+                onCardClick = onCardClick,
+                viewModel = viewModel
             )
 
             Spacer(modifier = Modifier.height(60.dp))
