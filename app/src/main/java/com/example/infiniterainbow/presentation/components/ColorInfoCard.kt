@@ -1,4 +1,4 @@
-package com.example.infiniterainbow.components
+package com.example.infiniterainbow.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,8 +23,9 @@ import com.example.infiniterainbow.R
 
 @Composable
 fun ColorCard(
-    color: Int = -15681628,
-    onCardClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    color: Int,
+    onCardClick: ((Int) -> Unit)? = null,
     onCopyClick: (Int) -> Unit,
 ) {
     val composeColor = Color(color)
@@ -32,21 +33,19 @@ fun ColorCard(
 
     Card(
         backgroundColor = composeColor,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .height(70.dp)
-            .clickable { onCardClick(color) },
+        modifier = modifier.then(
+            if (onCardClick != null) Modifier.clickable { onCardClick(color) } else Modifier
+        ),
         shape = RoundedCornerShape(16),
         elevation = 4.dp,
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.CenterEnd
+            contentAlignment = Alignment.TopEnd
         ) {
             IconButton(
                 onClick = { onCopyClick(color) },
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(4.dp)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_copy),
@@ -61,9 +60,13 @@ fun ColorCard(
 @Preview(showBackground = true)
 @Composable
 fun ColorCardPreview() {
-    Column {
-        ColorCard(color = -15681628, onCardClick = {}, onCopyClick = {})
-        ColorCard(color = -65536, onCardClick = {}, onCopyClick = {})
-        ColorCard(color = -16711936, onCardClick = {}, onCopyClick = {})
-    }
+    ColorCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .height(70.dp),
+        color = -15681628,
+        onCardClick = {},
+        onCopyClick = {}
+    )
 }

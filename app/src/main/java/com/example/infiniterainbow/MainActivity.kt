@@ -8,100 +8,59 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import com.example.infiniterainbow.components.ColorCard
-import kotlin.random.Random
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.infiniterainbow.presentation.screens.ColorListScreen
+import com.example.infiniterainbow.presentation.screens.PaletteScreen
 
 class MainActivity : ComponentActivity() {
 
     private var colorInfoToast: Toast? = null
-    private val initListSize = 75
-    private val incrementalAddition = 50
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        updateToastMsg(getString(R.string.check_color_value_text))
 
         setContent {
-            val listState = rememberLazyListState()
-            val colorsList = remember {
-                mutableStateListOf<Int>().apply {
-                    addAll(generateListOfColors(initListSize))
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "color_list") {
+                composable("color_list") {
+                    ColorListScreen(
+                        onCardClick = { colorInt ->
+                            navController.navigate("palette/$colorInt")
+                        },
+                        onCopyClick = { colorInt ->
+                            copyToClipboard(colorInt)
+                        }
+                    )
                 }
-            }
-
-            // Check if we reached the end of the list and add more colors
-            val isAtEnd = remember {
-                derivedStateOf {
-                    val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
-                    lastVisibleItem != null && lastVisibleItem.index >= colorsList.size - 5
-                }
-            }
-
-            LaunchedEffect(isAtEnd.value) {
-                if (isAtEnd.value) {
-                    colorsList.addAll(generateListOfColors(incrementalAddition, colorsList))
-                }
-            }
-
-            LazyColumn(
-                state = listState,
-                contentPadding = WindowInsets.systemBars.asPaddingValues()
-            ) {
-                items(colorsList) { colorInt ->
-                    ColorCard(
-                        color = colorInt,
-                        onCardClick = { onCardClicked(it) },
-                        onCopyClick = { onCopyClicked(it) }
+                composable(
+                    route = "palette/{colorInt}",
+                    arguments = listOf(navArgument("colorInt") { type = NavType.IntType })
+                ) { backStackEntry ->
+                    val colorInt = backStackEntry.arguments?.getInt("colorInt") ?: 0
+                    PaletteScreen(
+                        colorInt = colorInt,
+                        colorName = formatColorName(colorInt),
+                        onCopyClick = { copyToClipboard(it) },
+                        onCardClick = { tappedColorFromPalette ->
+                            navController.navigate("palette/$tappedColorFromPalette")
+                        }
                     )
                 }
             }
         }
     }
 
-    private fun onCardClicked(intColor: Int) {
-        updateToastMsg(formatColorName(intColor))
-    }
-
-    private fun onCopyClicked(intColor: Int) {
+    private fun copyToClipboard(intColor: Int) {
         val hexColor = formatColorName(intColor)
         val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(getString(R.string.color), hexColor)
         clipboard.setPrimaryClip(clip)
         updateToastMsg(getString(R.string.copied))
-    }
-
-    private fun generateListOfColors(
-        numOfColors: Int,
-        existingColors: Collection<Int> = emptyList()
-    ): List<Int> {
-        val newColors = mutableSetOf<Int>()
-        while (newColors.size < numOfColors) {
-            val color = getRandomColor()
-            if (color !in existingColors && color !in newColors) {
-                newColors.add(color)
-            }
-        }
-        return newColors.toList()
-    }
-
-    private fun getRandomColor(): Int {
-        return Color.argb(
-            255,
-            Random.nextInt(256),
-            Random.nextInt(256),
-            Random.nextInt(256)
-        )
     }
 
     private fun getRgbFromInt(initColor: Int): String {

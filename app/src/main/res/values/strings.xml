@@ -4,4 +4,7 @@
     <string name="copied">Copied</string>
     <string name="color">Color</string>
     <string name="full_color_name">RGB: %1$s  |  HEX: %2$s</string>
+    <string name="similar_colors">Similar colors</string>
+    <string name="analogous_colors">Analogous Colors</string>
+    <string name="complimentary">Complimentary</string>
 </resources>
