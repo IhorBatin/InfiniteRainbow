@@ -2,34 +2,36 @@ package com.example.infiniterainbow.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.infiniterainbow.R
+import com.example.infiniterainbow.presentation.viewmodel.RainbowViewModel
 
 @Composable
 fun ColorCard(
     modifier: Modifier = Modifier,
     color: Int,
+    viewModel: RainbowViewModel,
     onCardClick: ((Int) -> Unit)? = null,
-    onCopyClick: (Int) -> Unit,
+    showFavoriteIcon: Boolean = false,
 ) {
     val composeColor = Color(color)
     val contentColor = if (composeColor.luminance() > 0.5f) Color.Black else Color.White
+    val favorites by viewModel.favoriteColors.collectAsState()
+    val isFavorite = color in favorites
 
     Card(
         backgroundColor = composeColor,
@@ -43,30 +45,21 @@ fun ColorCard(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopEnd
         ) {
-            IconButton(
-                onClick = { onCopyClick(color) },
-                modifier = Modifier.padding(4.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_copy),
-                    contentDescription = "Copy color value",
-                    tint = contentColor
-                )
+            if (showFavoriteIcon) {
+                IconButton(
+                    onClick = { viewModel.toggleFavorite(color) },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_empty
+                        ),
+                        contentDescription = "save color value",
+                        tint = contentColor
+                    )
+                }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ColorCardPreview() {
-    ColorCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .height(70.dp),
-        color = -15681628,
-        onCardClick = {},
-        onCopyClick = {}
-    )
-}
