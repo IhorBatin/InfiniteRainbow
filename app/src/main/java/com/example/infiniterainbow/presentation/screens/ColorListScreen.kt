@@ -63,7 +63,6 @@ fun ColorListScreen(
                     .height(80.dp),
                 onCardClick = onCardClick,
                 showFavoriteIcon = true,
-                showHexOverlay = true,
                 viewModel = viewModel
             )
         }

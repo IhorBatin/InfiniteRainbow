@@ -18,11 +18,15 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,6 +59,7 @@ fun PaletteScreen(
     val isDark = isSystemInDarkTheme()
     val backgroundColor = if (isDark) Color.Black else Color.White
     val textColor = if (isDark) Color.White else Color.Black
+    var showHexValues by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier
@@ -73,6 +78,17 @@ fun PaletteScreen(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Info Button
+                IconButton(
+                    onClick = { showHexValues = !showHexValues}
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = "Share palette",
+                        tint = textColor
+                    )
+                }
+
                 // Share Button
                 IconButton(
                     onClick = { PaletteImageHelper.sharePalette(context, palette, colorName) }
@@ -146,7 +162,7 @@ fun PaletteScreen(
                             .padding(8.dp),
                         onCardClick = onCardClick,
                         viewModel = viewModel,
-                        showHexOverlay = true
+                        showHexOverlay = showHexValues
                     )
                     ColorCard(
                         color = palette.similar[1],
@@ -156,7 +172,7 @@ fun PaletteScreen(
                             .padding(8.dp),
                         onCardClick = onCardClick,
                         viewModel = viewModel,
-                        showHexOverlay = true
+                        showHexOverlay = showHexValues
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -168,7 +184,7 @@ fun PaletteScreen(
                             .padding(8.dp),
                         onCardClick = onCardClick,
                         viewModel = viewModel,
-                        showHexOverlay = true
+                        showHexOverlay = showHexValues
                     )
                     ColorCard(
                         color = palette.similar[3],
@@ -178,7 +194,7 @@ fun PaletteScreen(
                             .padding(8.dp),
                         onCardClick = onCardClick,
                         viewModel = viewModel,
-                        showHexOverlay = true
+                        showHexOverlay = showHexValues
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -190,7 +206,7 @@ fun PaletteScreen(
                             .padding(8.dp),
                         onCardClick = onCardClick,
                         viewModel = viewModel,
-                        showHexOverlay = true
+                        showHexOverlay = showHexValues
                     )
                     ColorCard(
                         color = palette.similar[5],
@@ -200,7 +216,7 @@ fun PaletteScreen(
                             .padding(8.dp),
                         onCardClick = onCardClick,
                         viewModel = viewModel,
-                        showHexOverlay = true
+                        showHexOverlay = showHexValues
                     )
                 }
             }
@@ -223,7 +239,7 @@ fun PaletteScreen(
                         .padding(8.dp),
                     onCardClick = onCardClick,
                     viewModel = viewModel,
-                    showHexOverlay = true
+                    showHexOverlay = showHexValues
                 )
                 ColorCard(
                     color = palette.analogous[1],
@@ -233,7 +249,7 @@ fun PaletteScreen(
                         .padding(8.dp),
                     onCardClick = onCardClick,
                     viewModel = viewModel,
-                    showHexOverlay = true
+                    showHexOverlay = showHexValues
                 )
             }
 
@@ -253,7 +269,7 @@ fun PaletteScreen(
                     .height(120.dp),
                 onCardClick = onCardClick,
                 viewModel = viewModel,
-                showHexOverlay = true
+                showHexOverlay = showHexValues
             )
 
             Spacer(modifier = Modifier.height(60.dp))
