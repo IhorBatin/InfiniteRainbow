@@ -2,10 +2,23 @@ package com.example.infiniterainbow.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -13,12 +26,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.infiniterainbow.R
 import com.example.infiniterainbow.presentation.components.ColorCard
+import com.example.infiniterainbow.presentation.util.PaletteImageHelper
 import com.example.infiniterainbow.presentation.viewmodel.RainbowViewModel
 
 @Composable
@@ -29,6 +43,7 @@ fun PaletteScreen(
     onCopyClick: (Int) -> Unit,
     onCardClick: (Int) -> Unit,
 ) {
+    val context = LocalContext.current
     LaunchedEffect(colorInt) {
         viewModel.initPalette(colorInt)
     }
@@ -46,19 +61,32 @@ fun PaletteScreen(
             .fillMaxSize()
             .background(backgroundColor)
     ) {
-        // Action buttons row
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 50.dp)
         ) {
+            // Action buttons row
             Row(
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                // Share Button
                 IconButton(
-                    onClick = { onCopyClick(colorInt) },
-                    modifier = Modifier.padding(8.dp)
+                    onClick = { PaletteImageHelper.sharePalette(context, palette, colorName) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share palette",
+                        tint = textColor
+                    )
+                }
+
+                // Copy Button
+                IconButton(
+                    onClick = { onCopyClick(colorInt) }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_copy),
@@ -66,10 +94,10 @@ fun PaletteScreen(
                         tint = textColor
                     )
                 }
+                
+                // Favorite Button
                 IconButton(
-                    onClick = { viewModel.toggleFavorite(colorInt) },
-                    modifier = Modifier
-                        .padding(top = 8.dp, end = 16.dp)
+                    onClick = { viewModel.toggleFavorite(colorInt) }
                 ) {
                     Icon(
                         painter = painterResource(
@@ -80,6 +108,7 @@ fun PaletteScreen(
                     )
                 }
             }
+            
             Spacer(modifier = Modifier.height(18.dp))
 
             // 1st section: originally picked color
@@ -95,7 +124,8 @@ fun PaletteScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),
-                viewModel = viewModel
+                viewModel = viewModel,
+                showHexOverlay = false
             )
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -115,7 +145,8 @@ fun PaletteScreen(
                             .height(100.dp)
                             .padding(8.dp),
                         onCardClick = onCardClick,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        showHexOverlay = true
                     )
                     ColorCard(
                         color = palette.similar[1],
@@ -124,7 +155,8 @@ fun PaletteScreen(
                             .height(100.dp)
                             .padding(8.dp),
                         onCardClick = onCardClick,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        showHexOverlay = true
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -135,7 +167,8 @@ fun PaletteScreen(
                             .height(100.dp)
                             .padding(8.dp),
                         onCardClick = onCardClick,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        showHexOverlay = true
                     )
                     ColorCard(
                         color = palette.similar[3],
@@ -144,7 +177,8 @@ fun PaletteScreen(
                             .height(100.dp)
                             .padding(8.dp),
                         onCardClick = onCardClick,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        showHexOverlay = true
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -155,7 +189,8 @@ fun PaletteScreen(
                             .height(100.dp)
                             .padding(8.dp),
                         onCardClick = onCardClick,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        showHexOverlay = true
                     )
                     ColorCard(
                         color = palette.similar[5],
@@ -164,14 +199,14 @@ fun PaletteScreen(
                             .height(100.dp)
                             .padding(8.dp),
                         onCardClick = onCardClick,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        showHexOverlay = true
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // TODO: Add dynamic degree - / - for user to select
             // 3rd section: Analogous Colors
             Text(
                 text = stringResource(id = R.string.analogous_colors),
@@ -187,7 +222,8 @@ fun PaletteScreen(
                         .height(100.dp)
                         .padding(8.dp),
                     onCardClick = onCardClick,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    showHexOverlay = true
                 )
                 ColorCard(
                     color = palette.analogous[1],
@@ -196,7 +232,8 @@ fun PaletteScreen(
                         .height(100.dp)
                         .padding(8.dp),
                     onCardClick = onCardClick,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    showHexOverlay = true
                 )
             }
 
@@ -215,11 +252,11 @@ fun PaletteScreen(
                     .fillMaxWidth()
                     .height(120.dp),
                 onCardClick = onCardClick,
-                viewModel = viewModel
+                viewModel = viewModel,
+                showHexOverlay = true
             )
 
             Spacer(modifier = Modifier.height(60.dp))
         }
     }
 }
-

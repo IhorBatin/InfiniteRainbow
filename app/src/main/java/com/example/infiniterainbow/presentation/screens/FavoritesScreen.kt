@@ -105,6 +105,7 @@ fun FavoritesScreen(
                                 .padding(8.dp)
                                 .aspectRatio(1f),
                             onCardClick = onCardClick,
+                            showHexOverlay = true,
                             viewModel = viewModel
                         )
                     }
