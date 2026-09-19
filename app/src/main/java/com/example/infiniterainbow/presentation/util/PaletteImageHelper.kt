@@ -5,6 +5,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.content.ContentValues
+import android.os.Build
+import android.provider.MediaStore
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.example.infiniterainbow.domain.usecase.GetColorPaletteUseCase
 import java.io.File
@@ -23,6 +27,62 @@ object PaletteImageHelper {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         context.startActivity(Intent.createChooser(intent, "Share Palette"))
+    }
+
+    fun savePaletteToStorage(
+        context: Context,
+        palette: GetColorPaletteUseCase.ColorPalette,
+        mainColorName: String
+    ) {
+        val safeName = mainColorName.replace("[^a-zA-Z0-9]".toRegex(), "_")
+        val filename = "Palette_${safeName}_${System.currentTimeMillis()}.png"
+        
+        Thread {
+            try {
+                val bitmap = generatePaletteBitmap(palette, mainColorName)
+                val resolver = context.contentResolver
+                val imageCollection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                } else {
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                }
+
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+                    put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                    
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/ColorPalettes")
+                        put(MediaStore.Images.Media.IS_PENDING, 1)
+                    }
+                }
+
+                val imageUri = resolver.insert(imageCollection, contentValues)
+
+                if (imageUri != null) {
+                    resolver.openOutputStream(imageUri)?.use { stream ->
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentValues.clear()
+                        contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+                        resolver.update(imageUri, contentValues, null, null)
+                    }
+                    
+                    (context as? android.app.Activity)?.runOnUiThread {
+                        Toast.makeText(context, "Saved to Pictures/ColorPalettes", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                
+                bitmap.recycle()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                (context as? android.app.Activity)?.runOnUiThread {
+                    Toast.makeText(context, "Failed to save image", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }.start()
     }
 
     private fun generatePaletteBitmap(palette: GetColorPaletteUseCase.ColorPalette, mainColorName: String): Bitmap {
