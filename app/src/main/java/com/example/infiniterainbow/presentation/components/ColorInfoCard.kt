@@ -11,6 +11,9 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -70,9 +73,7 @@ fun ColorCard(
                         onClick = { viewModel.toggleFavorite(color) }
                     ) {
                         Icon(
-                            painter = painterResource(
-                                id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_empty
-                            ),
+                            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                             contentDescription = "save color value",
                             tint = contentColor
                         )

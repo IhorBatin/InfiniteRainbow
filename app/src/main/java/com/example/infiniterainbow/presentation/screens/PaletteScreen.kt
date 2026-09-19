@@ -18,9 +18,13 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -117,7 +121,7 @@ fun PaletteScreen(
                     onClick = { onCopyClick(colorInt) }
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_copy),
+                        imageVector = Icons.Default.ContentCopy,
                         contentDescription = "Copy color value",
                         tint = textColor
                     )
@@ -128,9 +132,7 @@ fun PaletteScreen(
                     onClick = { viewModel.toggleFavorite(colorInt) }
                 ) {
                     Icon(
-                        painter = painterResource(
-                            id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_empty
-                        ),
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = "Toggle favorite",
                         tint = textColor
                     )
