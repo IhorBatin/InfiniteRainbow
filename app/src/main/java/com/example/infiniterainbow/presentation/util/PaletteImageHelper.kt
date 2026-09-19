@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.content.ContentValues
-import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.core.content.FileProvider
@@ -41,20 +40,13 @@ object PaletteImageHelper {
             try {
                 val bitmap = generatePaletteBitmap(palette, mainColorName)
                 val resolver = context.contentResolver
-                val imageCollection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-                } else {
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                }
+                val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
 
                 val contentValues = ContentValues().apply {
                     put(MediaStore.Images.Media.DISPLAY_NAME, filename)
                     put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-                    
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/ColorPalettes")
-                        put(MediaStore.Images.Media.IS_PENDING, 1)
-                    }
+                    put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/ColorPalettes")
+                    put(MediaStore.Images.Media.IS_PENDING, 1)
                 }
 
                 val imageUri = resolver.insert(imageCollection, contentValues)
@@ -64,11 +56,9 @@ object PaletteImageHelper {
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
                     }
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        contentValues.clear()
-                        contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
-                        resolver.update(imageUri, contentValues, null, null)
-                    }
+                    contentValues.clear()
+                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+                    resolver.update(imageUri, contentValues, null, null)
                     
                     (context as? android.app.Activity)?.runOnUiThread {
                         Toast.makeText(context, "Saved to Pictures/ColorPalettes", Toast.LENGTH_SHORT).show()
@@ -85,7 +75,10 @@ object PaletteImageHelper {
         }.start()
     }
 
-    private fun generatePaletteBitmap(palette: GetColorPaletteUseCase.ColorPalette, mainColorName: String): Bitmap {
+    private fun generatePaletteBitmap(
+        palette: GetColorPaletteUseCase.ColorPalette,
+        mainColorName: String
+    ): Bitmap {
         val width = 1080
         val height = 1650
         val bitmap = createBitmap(width, height)
