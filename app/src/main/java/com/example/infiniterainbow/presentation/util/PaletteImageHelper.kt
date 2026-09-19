@@ -5,6 +5,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.content.ContentValues
+import android.provider.MediaStore
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.example.infiniterainbow.domain.usecase.GetColorPaletteUseCase
 import java.io.File
@@ -13,10 +16,14 @@ import androidx.core.graphics.createBitmap
 
 object PaletteImageHelper {
 
-    fun sharePalette(context: Context, palette: GetColorPaletteUseCase.ColorPalette, mainColorName: String) {
+    fun sharePalette(
+        context: Context,
+        palette: GetColorPaletteUseCase.ColorPalette,
+        mainColorName: String
+    ) {
         val bitmap = generatePaletteBitmap(palette, mainColorName)
         val uri = saveBitmapToCache(context, bitmap)
-        
+
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "image/png"
             putExtra(Intent.EXTRA_STREAM, uri)
@@ -25,7 +32,57 @@ object PaletteImageHelper {
         context.startActivity(Intent.createChooser(intent, "Share Palette"))
     }
 
-    private fun generatePaletteBitmap(palette: GetColorPaletteUseCase.ColorPalette, mainColorName: String): Bitmap {
+    fun savePaletteToStorage(
+        context: Context,
+        palette: GetColorPaletteUseCase.ColorPalette,
+        mainColorName: String
+    ) {
+        val safeName = mainColorName.replace("[^a-zA-Z0-9]".toRegex(), "_")
+        val filename = "Palette_${safeName}_${System.currentTimeMillis()}.png"
+
+        Thread {
+            try {
+                val bitmap = generatePaletteBitmap(palette, mainColorName)
+                val resolver = context.contentResolver
+                val imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.Images.Media.DISPLAY_NAME, filename)
+                    put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                    put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/ColorPalettes")
+                    put(MediaStore.Images.Media.IS_PENDING, 1)
+                }
+
+                val imageUri = resolver.insert(imageCollection, contentValues)
+
+                if (imageUri != null) {
+                    resolver.openOutputStream(imageUri)?.use { stream ->
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                    }
+
+                    contentValues.clear()
+                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+                    resolver.update(imageUri, contentValues, null, null)
+
+                    (context as? android.app.Activity)?.runOnUiThread {
+                        Toast.makeText(context, "Saved to Pictures/ColorPalettes", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                bitmap.recycle()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                (context as? android.app.Activity)?.runOnUiThread {
+                    Toast.makeText(context, "Failed to save image", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }.start()
+    }
+
+    private fun generatePaletteBitmap(
+        palette: GetColorPaletteUseCase.ColorPalette,
+        mainColorName: String
+    ): Bitmap {
         val width = 1080
         val height = 1650
         val bitmap = createBitmap(width, height)
@@ -48,7 +105,7 @@ object PaletteImageHelper {
         // Main Color Card
         paint.color = palette.original
         canvas.drawRoundRect(50f, currentY, width - 50f, currentY + 400f, 40f, 40f, paint)
-        
+
         currentY += 400f + 70f
 
         // Similar Colors Header
@@ -82,15 +139,15 @@ object PaletteImageHelper {
         // Analogous Section
         paint.color = android.graphics.Color.BLACK
         canvas.drawText("Analogous colors", 50f, currentY, paint)
-        
+
         currentY += 30f
-        
+
         palette.analogous.forEachIndexed { index, color ->
             val left = 50f + index * gridWidth + cardPadding
             val top = currentY + cardPadding
             val right = left + gridWidth - 2 * cardPadding
             val bottom = top + gridHeight - 2 * cardPadding
-            
+
             paint.color = color
             canvas.drawRoundRect(left, top, right, bottom, 20f, 20f, paint)
             drawHexOverlay(canvas, color, left, top, right, bottom)
@@ -101,14 +158,14 @@ object PaletteImageHelper {
         // Complimentary Section
         paint.color = android.graphics.Color.BLACK
         canvas.drawText("Complimentary", 50f, currentY, paint)
-        
+
         currentY += 30f
-        
+
         val left = 50f + cardPadding
         val top = currentY + cardPadding
         val right = width - 50f - cardPadding
         val bottom = top + gridHeight - 2 * cardPadding
-        
+
         paint.color = palette.complementary
         canvas.drawRoundRect(left, top, right, bottom, 20f, 20f, paint)
         drawHexOverlay(canvas, color = palette.complementary, left, top, right, bottom)
@@ -116,7 +173,14 @@ object PaletteImageHelper {
         return bitmap
     }
 
-    private fun drawHexOverlay(canvas: Canvas, color: Int, left: Float, top: Float, right: Float, bottom: Float) {
+    private fun drawHexOverlay(
+        canvas: Canvas,
+        color: Int,
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float
+    ) {
         val hex = String.format("#%06X", 0xFFFFFF and color)
         val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             textSize = 30f
@@ -133,7 +197,10 @@ object PaletteImageHelper {
         return luminance > 0.5
     }
 
-    private fun saveBitmapToCache(context: Context, bitmap: Bitmap): android.net.Uri {
+    private fun saveBitmapToCache(
+        context: Context,
+        bitmap: Bitmap
+    ): android.net.Uri {
         val imagesFolder = File(context.cacheDir, "shared_images")
         imagesFolder.mkdirs()
         // Static filename to avoid creating multiple files, causing it to use up storage.

@@ -18,6 +18,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
@@ -85,6 +86,17 @@ fun PaletteScreen(
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = "Share palette",
+                        tint = textColor
+                    )
+                }
+
+                // Save Button
+                IconButton(
+                    onClick = { PaletteImageHelper.savePaletteToStorage(context, palette, colorName) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Download,
+                        contentDescription = "Save as picture",
                         tint = textColor
                     )
                 }
